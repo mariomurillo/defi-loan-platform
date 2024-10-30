@@ -35,4 +35,12 @@ contract DeFiLoanPlatform is Loan, Governance {
         _completeLoan(_loanId);
         payable(loan.lender).transfer(amountToRepay);
     }
+
+    function adjustInterestRate(uint _loanId, uint _newRate) public {
+        LoanDetails storage loan = loans[_loanId];
+        require(loan.lender == msg.sender, "Only the lender can adjust the interest rate");
+        require(!loan.completed, "The loan has already been completed");
+
+        loan.interestRate = _newRate;
+    }
 }
